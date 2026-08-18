@@ -1,35 +1,28 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useFitFontSize } from "../../hooks/useFitFontSize";
 import styles from "./PersonName.module.css";
 
 const MAX_PX = 56;
 const MIN_PX = 44;
-const MIN_DIVIDER_WIDTH = 900;
+const DIVIDER_WIDTH = 900;
 
 export function PersonName({ fullName }: { fullName: string }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLHeadingElement>(null);
-  const [dividerWidth, setDividerWidth] = useState(616);
 
-  const fontSize = useFitFontSize(
+  useFitFontSize(
     nameRef,
     wrapperRef,
     { maxPx: MAX_PX, minPx: MIN_PX, stepPx: 1 },
     [fullName],
   );
 
-  useLayoutEffect(() => {
-    const el = nameRef.current;
-    if (!el) return;
-    setDividerWidth(Math.max(MIN_DIVIDER_WIDTH, el.scrollWidth));
-  }, [fullName, fontSize]);
-
   return (
     <div ref={wrapperRef} className={styles.wrapper}>
       <h1 ref={nameRef} className={styles.name}>
         {fullName || "ФИО участника"}
       </h1>
-      <div className={styles.divider} style={{ width: dividerWidth }}>
+      <div className={styles.divider} style={{ width: DIVIDER_WIDTH }}>
         <span className={styles.line} />
         <svg
           className={styles.star}
