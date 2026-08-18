@@ -1,6 +1,6 @@
 .ribbon {
   position: absolute;
-  right: 0;
+  right: -20px;
   bottom: -6px;
   width: 1020px;
   height: auto;
