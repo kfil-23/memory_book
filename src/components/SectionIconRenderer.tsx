@@ -2,10 +2,10 @@ import { Info, Star } from "lucide-react";
 import type { SectionIcon } from "../types";
 
 const IMAGE_ICON_MAP: Partial<Record<SectionIcon, string>> = {
-  FileText: "/icons/main-info.svg",
-  Shield: "/icons/service.svg",
-  Medal: "/icons/awards.svg",
-  Folder: "/icons/archive.svg",
+  FileText: "icons/main-info.svg",
+  Shield: "icons/service.svg",
+  Medal: "icons/awards.svg",
+  Folder: "icons/archive.svg",
 };
 
 const LUCIDE_ICON_MAP = { Info, Star };
@@ -23,7 +23,7 @@ export function SectionIconRenderer({
   if (imageSrc) {
     return (
       <img
-        src={imageSrc}
+        src={`${import.meta.env.BASE_URL}${imageSrc}`}
         alt=""
         aria-hidden="true"
         width={size}

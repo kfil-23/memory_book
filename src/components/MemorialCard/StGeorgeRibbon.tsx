@@ -9,7 +9,7 @@ export function StGeorgeRibbon() {
   return (
     <img
       className={styles.ribbon}
-      src="/st-george-ribbon.png"
+      src={`${import.meta.env.BASE_URL}st-george-ribbon.png`}
       alt=""
       aria-hidden="true"
     />
