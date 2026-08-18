@@ -23,7 +23,7 @@ export function EditorPanel({
   return (
     <div className={styles.panel}>
       <h1 className={styles.appTitle}>Книга памяти Койдокурьи</h1>
-      <p className={styles.appSubtitle}>Генератор мемориальных карточек</p>
+      <p className={styles.appSubtitle}>Генератор карточек</p>
 
       <PersonForm
         fullName={person.fullName}
