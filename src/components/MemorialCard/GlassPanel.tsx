@@ -18,7 +18,7 @@ export function GlassPanel({
             backgroundImage: `url(${background.image})`,
             backgroundPosition: `${50 + background.offsetX}% ${50 + background.offsetY}%`,
             transform: `scale(${background.scale * 1.01})`,
-            filter: `blur(${background.blur + 4}px) brightness(${background.brightness * 1.12}) saturate(0.85)`,
+            filter: `blur(${background.blur + 4}px) brightness(${background.brightness * 1.2}) saturate(0.85)`,
           }}
         />
       ) : (

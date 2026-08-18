@@ -2,10 +2,10 @@ import { Info, Star } from "lucide-react";
 import type { SectionIcon } from "../types";
 
 const IMAGE_ICON_MAP: Partial<Record<SectionIcon, string>> = {
-  FileText: "/icons/main-info.png",
-  Shield: "/icons/service.png",
-  Medal: "/icons/awards.png",
-  Folder: "/icons/archive.png",
+  FileText: "/icons/main-info.svg",
+  Shield: "/icons/service.svg",
+  Medal: "/icons/awards.svg",
+  Folder: "/icons/archive.svg",
 };
 
 const LUCIDE_ICON_MAP = { Info, Star };

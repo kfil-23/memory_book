@@ -9,15 +9,16 @@
   border-radius: 24px;
   border: 2px solid rgba(255, 255, 255, 0.92);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  isolation: isolate;
   z-index: 1;
 }
 
 .frostedImage {
   position: absolute;
-  left: -84px;
-  top: -68px;
-  width: 1672px;
-  height: 895px;
+  left: -184px;
+  top: -122px;
+  width: 1873px;
+  height: 1002px;
   background-size: cover;
   background-repeat: no-repeat;
   transform-origin: center;
@@ -38,8 +39,8 @@
   inset: 0;
   background: linear-gradient(
     to right,
-    rgba(243, 235, 217, 0.54) 0%,
-    rgba(243, 235, 217, 0.28) 100%
+    rgba(250, 246, 235, 0.54) 0%,
+    rgba(250, 246, 235, 0.28) 100%
   );
 }
 
@@ -51,7 +52,7 @@
   background-repeat: repeat;
   background-size: 180px 180px;
   mix-blend-mode: overlay;
-  opacity: 0.3;
+  opacity: 0.25;
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,

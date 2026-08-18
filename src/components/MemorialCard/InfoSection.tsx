@@ -10,19 +10,19 @@ export function InfoSection({ section }: { section: MemorialSection }) {
 
   return (
     <div className={styles.section}>
-      <SectionIconRenderer
-        icon={section.icon}
-        size={50}
-        className={styles.icon}
-      />
-      <div className={styles.body}>
+      <div className={styles.headerRow}>
+        <SectionIconRenderer
+          icon={section.icon}
+          size={44}
+          className={styles.icon}
+        />
         <h2 className={styles.title}>{section.title}</h2>
-        <ul className={styles.list}>
-          {lines.map((line, index) => (
-            <li key={index}>{line}</li>
-          ))}
-        </ul>
       </div>
+      <ul className={styles.list}>
+        {lines.map((line, index) => (
+          <li key={index}>{line}</li>
+        ))}
+      </ul>
     </div>
   );
 }
