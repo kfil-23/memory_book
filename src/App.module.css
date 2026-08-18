@@ -1,0 +1,42 @@
+.app {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.editorColumn {
+  width: 420px;
+  flex-shrink: 0;
+  height: 100%;
+  border-right: 1px solid #ece8dc;
+}
+
+.previewColumn {
+  flex: 1;
+  height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  background: #e9e6db;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .app {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
+  .editorColumn {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #ece8dc;
+  }
+
+  .previewColumn {
+    height: 60vh;
+  }
+}

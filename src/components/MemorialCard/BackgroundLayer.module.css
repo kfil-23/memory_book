@@ -1,0 +1,21 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.image {
+  position: absolute;
+  inset: -6%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform-origin: center;
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(135deg, #6b6153, #3f3a30);
+}

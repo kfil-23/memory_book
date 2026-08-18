@@ -1,0 +1,8 @@
+.card {
+  position: relative;
+  width: 1672px;
+  height: 895px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ddd;
+}

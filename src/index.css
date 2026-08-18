@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Montserrat", system-ui, "Segoe UI", Roboto, sans-serif;
+  color: #1c1c1c;
+  background: #e9e6db;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}

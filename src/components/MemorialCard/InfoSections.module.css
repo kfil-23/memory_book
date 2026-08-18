@@ -1,0 +1,86 @@
+.container {
+  position: absolute;
+  left: 62px;
+  top: 145px;
+  width: 900px;
+  height: 590px;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.content[data-density="compact"] {
+  gap: 18px;
+}
+
+.content[data-density="veryCompact"] {
+  gap: 14px;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 62px 1fr;
+  column-gap: 18px;
+  align-items: start;
+}
+
+.icon {
+  width: 50px;
+  height: 50px;
+  margin-top: 1px;
+  object-fit: contain;
+}
+
+.body {
+  min-width: 0;
+}
+
+.title {
+  margin: 0 0 9px 0;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 29px;
+  line-height: 1.2;
+  color: #171717;
+}
+
+.content[data-density="compact"] .title {
+  font-size: 26px;
+}
+
+.content[data-density="veryCompact"] .title {
+  font-size: 24px;
+}
+
+.title::after {
+  content: ":";
+}
+
+.list {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.list li {
+  margin-bottom: 4px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 1.34;
+  color: #171717;
+}
+
+.content[data-density="compact"] .list li {
+  font-size: 19px;
+  line-height: 1.28;
+}
+
+.content[data-density="veryCompact"] .list li {
+  font-size: 18px;
+  line-height: 1.23;
+}

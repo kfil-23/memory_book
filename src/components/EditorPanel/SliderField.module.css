@@ -1,0 +1,22 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #4a4a4a;
+}
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.value {
+  font-variant-numeric: tabular-nums;
+  color: #8a8578;
+}
+
+.field input[type="range"] {
+  width: 100%;
+  accent-color: #c28a20;
+}

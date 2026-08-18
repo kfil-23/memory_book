@@ -1,0 +1,39 @@
+.wrapper {
+  position: absolute;
+  left: 80px;
+  top: 38px;
+  max-width: 900px;
+}
+
+.name {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  color: #111111;
+  line-height: 1.05;
+  max-width: 900px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 616px;
+  margin-top: 20px;
+}
+
+.line {
+  flex: 1;
+  height: 1.5px;
+  background: #c28a20;
+}
+
+.star {
+  width: 20px;
+  height: 20px;
+  color: #c28a20;
+  flex-shrink: 0;
+}
