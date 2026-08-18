@@ -4,7 +4,7 @@ import styles from "./PersonName.module.css";
 
 const MAX_PX = 56;
 const MIN_PX = 44;
-const MIN_DIVIDER_WIDTH = 260;
+const MIN_DIVIDER_WIDTH = 1020;
 
 export function PersonName({ fullName }: { fullName: string }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
