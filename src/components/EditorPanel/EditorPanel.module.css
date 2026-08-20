@@ -4,7 +4,8 @@
   gap: 22px;
   padding: 28px;
   background: #fdfcf9;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   box-sizing: border-box;
 }

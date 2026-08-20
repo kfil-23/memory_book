@@ -13,57 +13,63 @@ export function EditorPanel({
   cardRef,
   contentFits,
   onClear,
+  editable = true,
 }: {
   person: MemorialPerson;
   onChange: (person: MemorialPerson) => void;
   cardRef: RefObject<HTMLDivElement | null>;
   contentFits: boolean;
   onClear: () => void;
+  editable?: boolean;
 }) {
   return (
     <div className={styles.panel}>
       <h1 className={styles.appTitle}>Книга памяти Койдокурьи</h1>
       <p className={styles.appSubtitle}>Генератор карточек</p>
 
-      <PersonForm
-        fullName={person.fullName}
-        onChange={(fullName) => onChange({ ...person, fullName })}
-      />
+      {editable && (
+        <>
+          <PersonForm
+            fullName={person.fullName}
+            onChange={(fullName) => onChange({ ...person, fullName })}
+          />
 
-      <PortraitPanel
-        image={person.portrait}
-        transform={person.portraitTransform}
-        onImageChange={(portrait) => onChange({ ...person, portrait })}
-        onImageRemove={() => onChange({ ...person, portrait: undefined })}
-        onTransformChange={(portraitTransform) =>
-          onChange({ ...person, portraitTransform })
-        }
-      />
+          <PortraitPanel
+            image={person.portrait}
+            transform={person.portraitTransform}
+            onImageChange={(portrait) => onChange({ ...person, portrait })}
+            onImageRemove={() => onChange({ ...person, portrait: undefined })}
+            onTransformChange={(portraitTransform) =>
+              onChange({ ...person, portraitTransform })
+            }
+          />
 
-      <BackgroundPanel
-        settings={person.background}
-        onImageChange={(image) =>
-          onChange({ ...person, background: { ...person.background, image } })
-        }
-        onImageRemove={() =>
-          onChange({
-            ...person,
-            background: { ...person.background, image: undefined },
-          })
-        }
-        onSettingsChange={(background) => onChange({ ...person, background })}
-      />
+          <BackgroundPanel
+            settings={person.background}
+            onImageChange={(image) =>
+              onChange({ ...person, background: { ...person.background, image } })
+            }
+            onImageRemove={() =>
+              onChange({
+                ...person,
+                background: { ...person.background, image: undefined },
+              })
+            }
+            onSettingsChange={(background) => onChange({ ...person, background })}
+          />
 
-      <SectionEditor
-        sections={person.sections}
-        onChange={(sections) => onChange({ ...person, sections })}
-      />
+          <SectionEditor
+            sections={person.sections}
+            onChange={(sections) => onChange({ ...person, sections })}
+          />
+        </>
+      )}
 
       <ExportControls
         cardRef={cardRef}
         fullName={person.fullName}
         contentFits={contentFits}
-        onClear={onClear}
+        onClear={editable ? onClear : undefined}
       />
     </div>
   );

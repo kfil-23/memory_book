@@ -28,7 +28,7 @@ export function ExportControls({
   cardRef: RefObject<HTMLDivElement | null>;
   fullName: string;
   contentFits: boolean;
-  onClear: () => void;
+  onClear?: () => void;
 }) {
   const [isExporting, setIsExporting] = useState(false);
 
@@ -79,7 +79,7 @@ export function ExportControls({
   }
 
   function handleClear() {
-    if (window.confirm("Очистить карточку? Все введённые данные будут удалены.")) {
+    if (onClear && window.confirm("Очистить карточку? Все введённые данные будут удалены.")) {
       onClear();
     }
   }
@@ -138,10 +138,12 @@ export function ExportControls({
         </button>
       </div>
 
-      <button type="button" className={styles.clearButton} onClick={handleClear}>
-        <Trash2 size={16} strokeWidth={1.75} />
-        Очистить карточку
-      </button>
+      {onClear && (
+        <button type="button" className={styles.clearButton} onClick={handleClear}>
+          <Trash2 size={16} strokeWidth={1.75} />
+          Очистить карточку
+        </button>
+      )}
     </section>
   );
 }
