@@ -1,7 +1,5 @@
 import { useState, type RefObject } from "react";
-import { toPng, toJpeg } from "html-to-image";
 import { Download, Trash2, CheckCircle2, AlertTriangle } from "lucide-react";
-import jsPDF from "jspdf";
 import styles from "./EditorPanel.module.css";
 
 const EXPORT_WIDTH = 3344;
@@ -36,6 +34,7 @@ export function ExportControls({
 
   async function captureDataUrl(format: "png" | "jpeg") {
     if (!cardRef.current) return null;
+    const { toPng, toJpeg } = await import("html-to-image");
     const options = {
       pixelRatio: EXPORT_WIDTH / cardRef.current.offsetWidth,
       width: cardRef.current.offsetWidth,
@@ -52,7 +51,10 @@ export function ExportControls({
     setIsExporting(true);
     try {
       if (format === "pdf") {
-        const dataUrl = await captureDataUrl("png");
+        const [dataUrl, { default: jsPDF }] = await Promise.all([
+          captureDataUrl("png"),
+          import("jspdf"),
+        ]);
         if (!dataUrl) return;
         const pdf = new jsPDF({
           orientation: "landscape",
