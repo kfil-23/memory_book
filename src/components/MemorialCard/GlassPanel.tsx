@@ -10,7 +10,7 @@ export function GlassPanel({
   children: ReactNode;
 }) {
   return (
-    <div className={styles.panel}>
+    <div className={styles.panel} data-theme={background.theme}>
       {background.image ? (
         <div
           className={styles.frostedImage}

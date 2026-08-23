@@ -61,6 +61,34 @@
   outline-offset: -1px;
 }
 
+.themeToggle {
+  display: flex;
+  gap: 8px;
+}
+
+.themeOption {
+  flex: 1;
+  padding: 9px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #1c1c1c;
+  background: #fff;
+  border: 1px solid #d8d4c8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.themeOption:hover {
+  background: #f6f4ec;
+}
+
+.themeOptionActive {
+  color: #fff;
+  background: #1c1c1c;
+  border-color: #1c1c1c;
+}
+
 .sliderGroup {
   display: flex;
   flex-direction: column;

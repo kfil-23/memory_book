@@ -4,6 +4,8 @@ export type ImageTransform = {
   offsetY: number;
 };
 
+export type CardTheme = "light" | "dark";
+
 export type BackgroundSettings = {
   image?: string;
   scale: number;
@@ -11,6 +13,7 @@ export type BackgroundSettings = {
   offsetY: number;
   blur: number;
   brightness: number;
+  theme: CardTheme;
 };
 
 export type SectionIcon =
@@ -54,6 +57,7 @@ export const DEFAULT_BACKGROUND_SETTINGS: BackgroundSettings = {
   offsetY: 0,
   blur: 1.5,
   brightness: 0.97,
+  theme: "light",
 };
 
 export const STANDARD_SECTION_DEFS: Record<

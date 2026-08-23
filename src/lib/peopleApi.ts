@@ -29,7 +29,7 @@ function rowToPerson(row: PeopleRow): PersonRecord {
     fullName: row.full_name,
     portrait: row.portrait_url ?? undefined,
     portraitTransform: row.portrait_transform,
-    background: row.background,
+    background: { ...row.background, theme: row.background?.theme ?? "light" },
     sections: row.sections,
     updatedAt: row.updated_at,
   };

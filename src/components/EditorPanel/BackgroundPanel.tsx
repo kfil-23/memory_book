@@ -28,6 +28,22 @@ export function BackgroundPanel({
         onRemove={onImageRemove}
         maxDimension={2400}
       />
+      <div className={styles.themeToggle}>
+        <button
+          type="button"
+          className={`${styles.themeOption} ${settings.theme === "light" ? styles.themeOptionActive : ""}`}
+          onClick={() => onSettingsChange({ ...settings, theme: "light" })}
+        >
+          Светлая тонировка
+        </button>
+        <button
+          type="button"
+          className={`${styles.themeOption} ${settings.theme === "dark" ? styles.themeOptionActive : ""}`}
+          onClick={() => onSettingsChange({ ...settings, theme: "dark" })}
+        >
+          Тёмно-серая тонировка
+        </button>
+      </div>
       {settings.image && (
         <div className={styles.sliderGroup}>
           <SliderField

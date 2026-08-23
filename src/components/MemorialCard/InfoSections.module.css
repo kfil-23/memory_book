@@ -42,13 +42,17 @@
   object-fit: contain;
 }
 
+:global([data-theme="dark"]) .icon {
+  filter: invert(1);
+}
+
 .title {
   margin: 0;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: calc(29px * var(--fine-scale));
   line-height: 1.2;
-  color: #171717;
+  color: var(--text-secondary, #171717);
 }
 
 .content[data-density="compact"] .title {
@@ -75,7 +79,7 @@
   font-weight: 500;
   font-size: calc(21px * var(--fine-scale));
   line-height: 1.34;
-  color: #171717;
+  color: var(--text-secondary, #171717);
 }
 
 .content[data-density="compact"] .list li {
