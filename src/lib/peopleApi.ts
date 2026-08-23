@@ -84,6 +84,12 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
  * Загружает в Storage изображение, если это data:-URL (новое, выбранное
  * пользователем локально), либо возвращает как есть, если это уже ссылка
  * на файл в Storage (изображение не менялось).
+ *
+ * Если сама загрузка файла не проходит (у части пользователей провайдер
+ * рвёт именно такие запросы, а обычные JSON-запросы к таблице проходят
+ * нормально) — не проваливаем сохранение целиком, а кладём сжатую
+ * картинку прямо в запись таблицы как data:-URL. Так она едет тем же
+ * путём, что и текст, который уже подтверждённо работает.
  */
 async function resolveImageUrl(
   bucket: "portraits" | "backgrounds",
@@ -102,13 +108,21 @@ async function resolveImageUrl(
   }
   const path = `${personId}/${bucket === "portraits" ? "portrait" : "background"}.jpg`;
 
-  await withRetry(async () => {
-    const { error } = await supabase.storage.from(bucket).upload(path, blob, {
-      upsert: true,
-      contentType: blob.type || "image/jpeg",
+  try {
+    await withRetry(async () => {
+      const { error } = await supabase.storage.from(bucket).upload(path, blob, {
+        upsert: true,
+        contentType: blob.type || "image/jpeg",
+      });
+      if (error) throw error;
     });
-    if (error) throw error;
-  });
+  } catch (uploadError) {
+    console.warn(
+      `Загрузка фото в Storage (${bucket}) не прошла, сохраняем изображение прямо в записи`,
+      uploadError,
+    );
+    return value;
+  }
 
   const { data } = supabase.storage.from(bucket).getPublicUrl(path);
   return `${data.publicUrl}?t=${Date.now()}`;
