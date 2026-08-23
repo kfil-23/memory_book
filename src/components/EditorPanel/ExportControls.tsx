@@ -1,23 +1,7 @@
 import { useState, type RefObject } from "react";
 import { Download, Trash2, CheckCircle2, AlertTriangle } from "lucide-react";
+import { EXPORT_WIDTH, EXPORT_HEIGHT, sanitizeFileName, downloadDataUrl } from "../../lib/cardExport";
 import styles from "./EditorPanel.module.css";
-
-const EXPORT_WIDTH = 3344;
-const EXPORT_HEIGHT = 1790;
-
-function sanitizeFileName(fullName: string): string {
-  const trimmed = fullName.trim() || "Карточка";
-  return trimmed.replace(/\s+/g, "_").replace(/["'«»]/g, "");
-}
-
-function downloadDataUrl(dataUrl: string, fileName: string) {
-  const link = document.createElement("a");
-  link.href = dataUrl;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
 
 export function ExportControls({
   cardRef,

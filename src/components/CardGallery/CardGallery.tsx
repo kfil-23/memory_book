@@ -1,8 +1,32 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { User, Plus, LogIn, LogOut, Search } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { User, Plus, LogIn, LogOut, Search, Download } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
-import { listPeople, type PersonListItem } from "../../lib/peopleApi";
+import { listPeople, getPerson, type PersonListItem, type PersonRecord } from "../../lib/peopleApi";
+import { getErrorMessage } from "../../lib/errorMessage";
+import { EXPORT_WIDTH, sanitizeFileName, downloadBlob } from "../../lib/cardExport";
+import { MemorialCard } from "../MemorialCard/MemorialCard";
 import styles from "./CardGallery.module.css";
+
+function CardThumb({ portraitUrl }: { portraitUrl?: string }) {
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [portraitUrl]);
+
+  if (!portraitUrl || failed) {
+    return <User size={32} strokeWidth={1.5} className={styles.thumbPlaceholder} />;
+  }
+
+  return (
+    <img
+      src={portraitUrl}
+      alt=""
+      className={styles.thumbImage}
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 export function CardGallery({
   onOpen,
@@ -21,6 +45,9 @@ export function CardGallery({
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loggingIn, setLoggingIn] = useState(false);
+  const [bulkExport, setBulkExport] = useState<{ current: number; total: number } | null>(null);
+  const [bulkExportPerson, setBulkExportPerson] = useState<PersonRecord | null>(null);
+  const bulkExportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -49,6 +76,52 @@ export function CardGallery({
     }
     setPassword("");
     setLoginOpen(false);
+  }
+
+  async function handleDownloadAll() {
+    if (!people || people.length === 0) return;
+    setBulkExport({ current: 0, total: people.length });
+    try {
+      const [{ default: JSZip }, { toPng }] = await Promise.all([
+        import("jszip"),
+        import("html-to-image"),
+      ]);
+      const zip = new JSZip();
+      const usedNames = new Set<string>();
+
+      for (let i = 0; i < people.length; i += 1) {
+        setBulkExport({ current: i + 1, total: people.length });
+        const record = await getPerson(people[i].id);
+        setBulkExportPerson(record);
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+        const node = bulkExportRef.current;
+        if (!node) continue;
+        const dataUrl = await toPng(node, {
+          pixelRatio: EXPORT_WIDTH / node.offsetWidth,
+          width: node.offsetWidth,
+          height: node.offsetHeight,
+        });
+
+        const baseName = sanitizeFileName(record.fullName);
+        let fileName = `${baseName}.png`;
+        let suffix = 2;
+        while (usedNames.has(fileName)) {
+          fileName = `${baseName}_${suffix}.png`;
+          suffix += 1;
+        }
+        usedNames.add(fileName);
+        zip.file(fileName, dataUrl.split(",")[1] ?? "", { base64: true });
+      }
+
+      const blob = await zip.generateAsync({ type: "blob" });
+      downloadBlob(blob, "Карточки_памяти.zip");
+    } catch (error) {
+      window.alert("Не удалось скачать карточки: " + getErrorMessage(error));
+    } finally {
+      setBulkExport(null);
+      setBulkExportPerson(null);
+    }
   }
 
   const filtered =
@@ -113,6 +186,20 @@ export function CardGallery({
           />
         </div>
 
+        {people && people.length > 0 && (
+          <button
+            type="button"
+            className={styles.secondaryButton}
+            onClick={handleDownloadAll}
+            disabled={!!bulkExport}
+          >
+            <Download size={16} strokeWidth={2} />
+            {bulkExport
+              ? `Скачивание ${bulkExport.current} из ${bulkExport.total}…`
+              : "Скачать все карточки"}
+          </button>
+        )}
+
         {isAuthenticated && (
           <button type="button" className={styles.primaryButton} onClick={onCreate}>
             <Plus size={16} strokeWidth={2} />
@@ -138,16 +225,18 @@ export function CardGallery({
             onClick={() => onOpen(person.id)}
           >
             <div className={styles.thumb}>
-              {person.portraitUrl ? (
-                <img src={person.portraitUrl} alt="" className={styles.thumbImage} />
-              ) : (
-                <User size={32} strokeWidth={1.5} className={styles.thumbPlaceholder} />
-              )}
+              <CardThumb portraitUrl={person.portraitUrl} />
             </div>
             <span className={styles.cardName}>{person.fullName || "Без имени"}</span>
           </button>
         ))}
       </div>
+
+      {bulkExportPerson && (
+        <div style={{ position: "fixed", top: 0, left: "-99999px" }} aria-hidden="true">
+          <MemorialCard ref={bulkExportRef} person={bulkExportPerson} />
+        </div>
+      )}
     </div>
   );
 }
