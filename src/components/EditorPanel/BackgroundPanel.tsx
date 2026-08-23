@@ -26,6 +26,7 @@ export function BackgroundPanel({
         image={settings.image}
         onChange={onImageChange}
         onRemove={onImageRemove}
+        maxDimension={3000}
       />
       {settings.image && (
         <div className={styles.sliderGroup}>

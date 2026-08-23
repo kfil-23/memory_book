@@ -8,6 +8,7 @@ import { CardGallery } from "./components/CardGallery/CardGallery";
 import { createEmptyPerson } from "./demoData";
 import { useAuth } from "./hooks/useAuth";
 import { getPerson, savePerson, deletePerson } from "./lib/peopleApi";
+import { getErrorMessage } from "./lib/errorMessage";
 import type { MemorialPerson } from "./types";
 import styles from "./App.module.css";
 
@@ -56,10 +57,7 @@ function App() {
         sections: record.sections,
       });
     } catch (error) {
-      window.alert(
-        "Не удалось загрузить карточку: " +
-          (error instanceof Error ? error.message : String(error)),
-      );
+      window.alert("Не удалось загрузить карточку: " + getErrorMessage(error));
       setView("gallery");
     }
   }
@@ -81,7 +79,7 @@ function App() {
       setGalleryReloadToken((token) => token + 1);
     } catch (error) {
       setSaveStatus("error");
-      setSaveErrorMessage(error instanceof Error ? error.message : String(error));
+      setSaveErrorMessage(getErrorMessage(error));
     }
   }
 
@@ -93,10 +91,7 @@ function App() {
       setGalleryReloadToken((token) => token + 1);
       openGallery();
     } catch (error) {
-      window.alert(
-        "Не удалось удалить карточку: " +
-          (error instanceof Error ? error.message : String(error)),
-      );
+      window.alert("Не удалось удалить карточку: " + getErrorMessage(error));
     }
   }
 

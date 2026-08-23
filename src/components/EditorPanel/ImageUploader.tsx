@@ -1,30 +1,25 @@
-import { useRef, type ChangeEvent } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import { ImagePlus, RotateCw, Trash2 } from "lucide-react";
+import { resizeImageToDataUrl } from "../../lib/resizeImage";
 import styles from "./ImageUploader.module.css";
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
-function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
 
 export function ImageUploader({
   label,
   image,
   onChange,
   onRemove,
+  maxDimension = 1800,
 }: {
   label: string;
   image?: string;
   onChange: (dataUrl: string) => void;
   onRemove: () => void;
+  maxDimension?: number;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   async function handleFileSelected(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -34,8 +29,18 @@ export function ImageUploader({
       window.alert("Поддерживаются форматы: JPG, JPEG, PNG, WEBP");
       return;
     }
-    const dataUrl = await fileToDataUrl(file);
-    onChange(dataUrl);
+    setIsProcessing(true);
+    try {
+      const dataUrl = await resizeImageToDataUrl(file, maxDimension);
+      onChange(dataUrl);
+    } catch (error) {
+      window.alert(
+        "Не удалось обработать изображение: " +
+          (error instanceof Error ? error.message : String(error)),
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   }
 
   return (
@@ -54,15 +59,17 @@ export function ImageUploader({
             type="button"
             className={styles.actionButton}
             onClick={() => inputRef.current?.click()}
+            disabled={isProcessing}
           >
             <RotateCw size={15} strokeWidth={1.75} />
-            {image ? "Заменить" : "Загрузить"}
+            {isProcessing ? "Обработка…" : image ? "Заменить" : "Загрузить"}
           </button>
           {image && (
             <button
               type="button"
               className={`${styles.actionButton} ${styles.danger}`}
               onClick={onRemove}
+              disabled={isProcessing}
             >
               <Trash2 size={15} strokeWidth={1.75} />
               Удалить

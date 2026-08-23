@@ -74,11 +74,11 @@ async function resolveImageUrl(
   if (!value.startsWith("data:")) return value;
 
   const blob = await (await fetch(value)).blob();
-  const path = `${personId}/${bucket === "portraits" ? "portrait" : "background"}.webp`;
+  const path = `${personId}/${bucket === "portraits" ? "portrait" : "background"}.jpg`;
 
   const { error } = await supabase.storage.from(bucket).upload(path, blob, {
     upsert: true,
-    contentType: blob.type || "image/webp",
+    contentType: blob.type || "image/jpeg",
   });
   if (error) throw error;
 
