@@ -6,7 +6,7 @@
 export function resizeImageToDataUrl(
   file: File,
   maxDimension: number,
-  quality = 0.85,
+  quality = 0.8,
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();

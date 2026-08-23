@@ -24,7 +24,7 @@ export function PortraitPanel({
         image={image}
         onChange={onImageChange}
         onRemove={onImageRemove}
-        maxDimension={2200}
+        maxDimension={1800}
       />
       {image && (
         <div className={styles.sliderGroup}>

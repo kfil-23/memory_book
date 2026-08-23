@@ -61,6 +61,26 @@ export async function deletePerson(id: string): Promise<void> {
 }
 
 /**
+ * Повторяет попытку при сетевой ошибке (нестабильное соединение) —
+ * загрузка файла с первого раза не всегда докачивается на медленном
+ * интернете, но обычно проходит со 2-3 попытки.
+ */
+async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 1200 * (attempt + 1)));
+      }
+    }
+  }
+  throw lastError;
+}
+
+/**
  * Загружает в Storage изображение, если это data:-URL (новое, выбранное
  * пользователем локально), либо возвращает как есть, если это уже ссылка
  * на файл в Storage (изображение не менялось).
@@ -76,11 +96,13 @@ async function resolveImageUrl(
   const blob = await (await fetch(value)).blob();
   const path = `${personId}/${bucket === "portraits" ? "portrait" : "background"}.jpg`;
 
-  const { error } = await supabase.storage.from(bucket).upload(path, blob, {
-    upsert: true,
-    contentType: blob.type || "image/jpeg",
+  await withRetry(async () => {
+    const { error } = await supabase.storage.from(bucket).upload(path, blob, {
+      upsert: true,
+      contentType: blob.type || "image/jpeg",
+    });
+    if (error) throw error;
   });
-  if (error) throw error;
 
   const { data } = supabase.storage.from(bucket).getPublicUrl(path);
   return `${data.publicUrl}?t=${Date.now()}`;
@@ -92,10 +114,12 @@ export async function savePerson(
 ): Promise<PersonRecord> {
   const personId = id ?? crypto.randomUUID();
 
-  const [portraitUrl, backgroundImageUrl] = await Promise.all([
-    resolveImageUrl("portraits", personId, person.portrait),
-    resolveImageUrl("backgrounds", personId, person.background.image),
-  ]);
+  const portraitUrl = await resolveImageUrl("portraits", personId, person.portrait);
+  const backgroundImageUrl = await resolveImageUrl(
+    "backgrounds",
+    personId,
+    person.background.image,
+  );
 
   const payload = {
     id: personId,
