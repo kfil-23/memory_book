@@ -7,7 +7,7 @@ import { EXPORT_WIDTH, sanitizeFileName, downloadBlob } from "../../lib/cardExpo
 import { MemorialCard } from "../MemorialCard/MemorialCard";
 import styles from "./CardGallery.module.css";
 
-function CardThumb({ portraitUrl }: { portraitUrl?: string }) {
+function CardThumb({ portraitUrl }: { portraitUrl?: string | null }) {
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
