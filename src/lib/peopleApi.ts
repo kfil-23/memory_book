@@ -94,6 +94,12 @@ async function resolveImageUrl(
   if (!value.startsWith("data:")) return value;
 
   const blob = await (await fetch(value)).blob();
+  if (blob.size === 0) {
+    throw new Error("Фото повреждено или пусто — выберите файл заново");
+  }
+  if (blob.size > 15 * 1024 * 1024) {
+    throw new Error("Фото слишком большое даже после сжатия — попробуйте другой файл");
+  }
   const path = `${personId}/${bucket === "portraits" ? "portrait" : "background"}.jpg`;
 
   await withRetry(async () => {

@@ -15,6 +15,11 @@ export function resizeImageToDataUrl(
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);
 
+      if (!img.width || !img.height) {
+        reject(new Error("Не удалось определить размер изображения — попробуйте другой файл"));
+        return;
+      }
+
       const scale = Math.min(1, maxDimension / Math.max(img.width, img.height));
       const width = Math.round(img.width * scale);
       const height = Math.round(img.height * scale);
@@ -27,8 +32,26 @@ export function resizeImageToDataUrl(
         reject(new Error("Canvas недоступен"));
         return;
       }
-      ctx.drawImage(img, 0, 0, width, height);
-      resolve(canvas.toDataURL("image/jpeg", quality));
+
+      try {
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+        if (!dataUrl || dataUrl === "data:," || dataUrl.length < 100) {
+          reject(
+            new Error(
+              "Не удалось обработать изображение (слишком большое разрешение) — попробуйте уменьшить фото перед загрузкой",
+            ),
+          );
+          return;
+        }
+        resolve(dataUrl);
+      } catch {
+        reject(
+          new Error(
+            "Не удалось обработать изображение (слишком большое разрешение) — попробуйте уменьшить фото перед загрузкой",
+          ),
+        );
+      }
     };
 
     img.onerror = () => {
